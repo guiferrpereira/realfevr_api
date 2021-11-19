@@ -1,0 +1,78 @@
+version: 2.1
+orbs:
+  docker: circleci/docker@1.3.0
+
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:3.0.2
+        environment:
+          PGHOST: localhost
+          RACK_ENV: test
+          RAILS_ENV: test
+      - image: circleci/postgres:9.6.9-alpine
+        environment:
+          POSTGRES_DB: realfevr_api_test
+          POSTGRES_USER: circleci
+          POSTGRES_HOST_AUTH_METHOD: trust
+    steps:
+      - checkout
+      - run:
+          # https://stackoverflow.com/questions/27472234/an-error-occurred-while-installing-rugged
+          name: Install Cmake
+          command: sudo apt-get install cmake
+      - restore_cache:
+          keys:
+            - realfevr_api-bundle-{{ checksum "Gemfile.lock" }}
+            - realfevr_api-bundle-
+      - run:
+          name: Bundle Check or Install
+          command: bundle check --path vendor/bundle || bundle install --jobs=4 --retry=3 --path vendor/bundle
+      - save_cache:
+          key: realfevr_api-bundle-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Rails best practices
+          command: bundle exec rails_best_practices
+      - run:
+          name: rubocop
+          command: bundle exec rubocop
+      - run:
+          name: Create and Load Database
+          command: bundle exec rake db:create db:schema:load --trace
+      - run:
+          name: Execute Rspec Tests
+          command: |
+            mkdir -p /tmp/coverage
+            bundle exec rspec
+      - run:
+          name: Store coverage report
+          command: |
+            mv coverage/coverage.json /tmp/coverage/
+            mv coverage/badge.svg /tmp/coverage/
+      - persist_to_workspace:
+          root: /tmp/coverage
+          paths: .
+      - store_artifacts:
+          path: /tmp/coverage
+          destination: coverage
+      - run:
+          name: Upload coverage to be persistent
+          command: |
+            mkdir -p /tmp/internal
+            cd /tmp/internal
+            git config --global user.email "guiferrpereira@gmail.com"
+            git config --global user.name "guiferrpereira"
+            git clone https://guiferrpereira:${DANGER_GITHUB_API_TOKEN}@github.com/guiferrpereira/coverage.git
+            cd coverage
+            mkdir -p ${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}
+            mv /tmp/coverage/* /tmp/internal/coverage/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BRANCH}
+            git add . && git commit -m "Add ${CIRCLE_PROJECT_REPONAME} coverage"
+            git push --set-upstream origin master
+  lint-dockerfile:
+    executor: docker/machine
+    steps:
+      - checkout
+      - docker/dockerlint:
+          treat-warnings-as-errors: true
