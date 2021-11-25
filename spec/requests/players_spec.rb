@@ -12,116 +12,116 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/players", type: :request do
+RSpec.describe '/players', type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Player. As you add validations to Player, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  let(:valid_attributes) do
+    skip('Add a hash of attributes valid for your model')
+  end
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:invalid_attributes) do
+    skip('Add a hash of attributes invalid for your model')
+  end
 
   # This should return the minimal set of values that should be in the headers
   # in order to pass any filters (e.g. authentication) defined in
   # PlayersController, or in your router and rack
   # middleware. Be sure to keep this updated too.
-  let(:valid_headers) {
+  let(:valid_headers) do
     {}
-  }
+  end
 
-  describe "GET /index" do
-    it "renders a successful response" do
+  describe 'GET /index' do
+    it 'renders a successful response' do
       Player.create! valid_attributes
       get players_url, headers: valid_headers, as: :json
       expect(response).to be_successful
     end
   end
 
-  describe "GET /show" do
-    it "renders a successful response" do
+  describe 'GET /show' do
+    it 'renders a successful response' do
       player = Player.create! valid_attributes
       get player_url(player), as: :json
       expect(response).to be_successful
     end
   end
 
-  describe "POST /create" do
-    context "with valid parameters" do
-      it "creates a new Player" do
-        expect {
+  describe 'POST /create' do
+    context 'with valid parameters' do
+      it 'creates a new Player' do
+        expect do
           post players_url,
                params: { player: valid_attributes }, headers: valid_headers, as: :json
-        }.to change(Player, :count).by(1)
+        end.to change(Player, :count).by(1)
       end
 
-      it "renders a JSON response with the new player" do
+      it 'renders a JSON response with the new player' do
         post players_url,
              params: { player: valid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:created)
-        expect(response.content_type).to match(a_string_including("application/json"))
+        expect(response.content_type).to match(a_string_including('application/json'))
       end
     end
 
-    context "with invalid parameters" do
-      it "does not create a new Player" do
-        expect {
+    context 'with invalid parameters' do
+      it 'does not create a new Player' do
+        expect do
           post players_url,
                params: { player: invalid_attributes }, as: :json
-        }.to change(Player, :count).by(0)
+        end.to change(Player, :count).by(0)
       end
 
-      it "renders a JSON response with errors for the new player" do
+      it 'renders a JSON response with errors for the new player' do
         post players_url,
              params: { player: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq("application/json")
+        expect(response.content_type).to eq('application/json')
       end
     end
   end
 
-  describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+  describe 'PATCH /update' do
+    context 'with valid parameters' do
+      let(:new_attributes) do
+        skip('Add a hash of attributes valid for your model')
+      end
 
-      it "updates the requested player" do
+      it 'updates the requested player' do
         player = Player.create! valid_attributes
         patch player_url(player),
               params: { player: new_attributes }, headers: valid_headers, as: :json
         player.reload
-        skip("Add assertions for updated state")
+        skip('Add assertions for updated state')
       end
 
-      it "renders a JSON response with the player" do
+      it 'renders a JSON response with the player' do
         player = Player.create! valid_attributes
         patch player_url(player),
               params: { player: new_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to match(a_string_including("application/json"))
+        expect(response.content_type).to match(a_string_including('application/json'))
       end
     end
 
-    context "with invalid parameters" do
-      it "renders a JSON response with errors for the player" do
+    context 'with invalid parameters' do
+      it 'renders a JSON response with errors for the player' do
         player = Player.create! valid_attributes
         patch player_url(player),
               params: { player: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq("application/json")
+        expect(response.content_type).to eq('application/json')
       end
     end
   end
 
-  describe "DELETE /destroy" do
-    it "destroys the requested player" do
+  describe 'DELETE /destroy' do
+    it 'destroys the requested player' do
       player = Player.create! valid_attributes
-      expect {
+      expect do
         delete player_url(player), headers: valid_headers, as: :json
-      }.to change(Player, :count).by(-1)
+      end.to change(Player, :count).by(-1)
     end
   end
 end

@@ -29,6 +29,9 @@ Rails/FilePath:
   Exclude:
     - 'config/environments/development.rb'
 
+RSpec/MultipleExpectations:
+  Enabled: false
+
 # Offense count: 25
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
