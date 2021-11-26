@@ -11,7 +11,7 @@ module Api
         private
 
         def configure_sign_up_params
-          devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+          devise_parameter_sanitizer.permit(:registration, keys: [:name])
         end
       end
     end

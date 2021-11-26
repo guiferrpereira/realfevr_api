@@ -1,7 +1,5 @@
 module Api
   class ApiController < ApplicationController
-    include DeviseTokenAuth::Concerns::SetUserByToken
-
     before_action :redirect_unauthorized!
 
     private
