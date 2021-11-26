@@ -31,3 +31,6 @@
 
 # ignore .env file
 .env
+
+app/.DS_Store
+app/controllers/.DS_Store
