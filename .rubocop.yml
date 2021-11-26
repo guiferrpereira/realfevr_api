@@ -25,6 +25,10 @@ Lint/AmbiguousBlockAssociation:
 Style/Documentation:
   Enabled: false
 
+Style/TernaryParentheses:
+  Exclude:
+    - 'lib/date_utils.rb'
+
 Rails/FilePath:
   Exclude:
     - 'config/environments/development.rb'
