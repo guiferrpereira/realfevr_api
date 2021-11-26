@@ -1,0 +1,4 @@
+:schedule:
+  fetch_player_info_job:
+    cron: '0 0 */1 * * *'
+    class: FetchPlayerInfoJob
