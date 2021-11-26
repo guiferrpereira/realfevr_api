@@ -35,7 +35,7 @@ RSpec.describe '/api/v1/players', type: :request do
   describe 'GET /index' do
     it 'renders a successful response' do
       Player.create! valid_attributes
-      get api_players_url, headers: valid_headers, as: :json
+      get api_v1_players_url, headers: valid_headers, as: :json
       expect(response).to be_successful
     end
   end
@@ -43,7 +43,7 @@ RSpec.describe '/api/v1/players', type: :request do
   describe 'GET /show' do
     it 'renders a successful response' do
       player = Player.create! valid_attributes
-      get api_player_url(player), as: :json
+      get api_v1_player_url(player), as: :json
       expect(response).to be_successful
     end
   end
@@ -52,13 +52,13 @@ RSpec.describe '/api/v1/players', type: :request do
     context 'with valid parameters' do
       it 'creates a new Player' do
         expect do
-          post api_players_url,
+          post api_v1_players_url,
                params: { player: valid_attributes }, headers: valid_headers, as: :json
         end.to change(Player, :count).by(1)
       end
 
       it 'renders a JSON response with the new player' do
-        post api_players_url,
+        post api_v1_players_url,
              params: { player: valid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including('application/json'))
@@ -68,13 +68,13 @@ RSpec.describe '/api/v1/players', type: :request do
     context 'with invalid parameters' do
       it 'does not create a new Player' do
         expect do
-          post api_players_url,
+          post api_v1_players_url,
                params: { player: invalid_attributes }, as: :json
         end.to change(Player, :count).by(0)
       end
 
       it 'renders a JSON response with errors for the new player' do
-        post api_players_url,
+        post api_v1_players_url,
              params: { player: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
@@ -90,7 +90,7 @@ RSpec.describe '/api/v1/players', type: :request do
 
       it 'updates the requested player' do
         player = Player.create! valid_attributes
-        patch api_player_url(player),
+        patch api_v1_player_url(player),
               params: { player: new_attributes }, headers: valid_headers, as: :json
         player.reload
         skip('Add assertions for updated state')
@@ -98,7 +98,7 @@ RSpec.describe '/api/v1/players', type: :request do
 
       it 'renders a JSON response with the player' do
         player = Player.create! valid_attributes
-        patch api_player_url(player),
+        patch api_v1_player_url(player),
               params: { player: new_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including('application/json'))
@@ -108,7 +108,7 @@ RSpec.describe '/api/v1/players', type: :request do
     context 'with invalid parameters' do
       it 'renders a JSON response with errors for the player' do
         player = Player.create! valid_attributes
-        patch api_player_url(player),
+        patch api_v1_player_url(player),
               params: { player: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
@@ -120,7 +120,7 @@ RSpec.describe '/api/v1/players', type: :request do
     it 'destroys the requested player' do
       player = Player.create! valid_attributes
       expect do
-        delete api_player_url(player), headers: valid_headers, as: :json
+        delete api_v1_player_url(player), headers: valid_headers, as: :json
       end.to change(Player, :count).by(-1)
     end
   end

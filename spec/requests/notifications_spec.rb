@@ -35,7 +35,7 @@ RSpec.describe '/api/v1/notifications', type: :request do
   describe 'GET /index' do
     it 'renders a successful response' do
       Notification.create! valid_attributes
-      get api_notifications_url, headers: valid_headers, as: :json
+      get api_v1_notifications_url, headers: valid_headers, as: :json
       expect(response).to be_successful
     end
   end
@@ -43,7 +43,7 @@ RSpec.describe '/api/v1/notifications', type: :request do
   describe 'GET /show' do
     it 'renders a successful response' do
       notification = Notification.create! valid_attributes
-      get api_notification_url(notification), as: :json
+      get api_v1_notification_url(notification), as: :json
       expect(response).to be_successful
     end
   end
@@ -52,13 +52,13 @@ RSpec.describe '/api/v1/notifications', type: :request do
     context 'with valid parameters' do
       it 'creates a new Notification' do
         expect do
-          post api_notifications_url,
+          post api_v1_notifications_url,
                params: { notification: valid_attributes }, headers: valid_headers, as: :json
         end.to change(Notification, :count).by(1)
       end
 
       it 'renders a JSON response with the new notification' do
-        post api_notifications_url,
+        post api_v1_notifications_url,
              params: { notification: valid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including('application/json'))
@@ -68,13 +68,13 @@ RSpec.describe '/api/v1/notifications', type: :request do
     context 'with invalid parameters' do
       it 'does not create a new Notification' do
         expect do
-          post api_notifications_url,
+          post api_v1_notifications_url,
                params: { notification: invalid_attributes }, as: :json
         end.to change(Notification, :count).by(0)
       end
 
       it 'renders a JSON response with errors for the new notification' do
-        post api_notifications_url,
+        post api_v1_notifications_url,
              params: { notification: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
@@ -90,7 +90,7 @@ RSpec.describe '/api/v1/notifications', type: :request do
 
       it 'updates the requested notification' do
         notification = Notification.create! valid_attributes
-        patch api_notification_url(notification),
+        patch api_v1_notification_url(notification),
               params: { notification: new_attributes }, headers: valid_headers, as: :json
         notification.reload
         skip('Add assertions for updated state')
@@ -98,7 +98,7 @@ RSpec.describe '/api/v1/notifications', type: :request do
 
       it 'renders a JSON response with the notification' do
         notification = Notification.create! valid_attributes
-        patch api_notification_url(notification),
+        patch api_v1_notification_url(notification),
               params: { notification: new_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including('application/json'))
@@ -108,7 +108,7 @@ RSpec.describe '/api/v1/notifications', type: :request do
     context 'with invalid parameters' do
       it 'renders a JSON response with errors for the notification' do
         notification = Notification.create! valid_attributes
-        patch api_notification_url(notification),
+        patch api_v1_notification_url(notification),
               params: { notification: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
@@ -120,7 +120,7 @@ RSpec.describe '/api/v1/notifications', type: :request do
     it 'destroys the requested notification' do
       notification = Notification.create! valid_attributes
       expect do
-        delete api_notification_url(notification), headers: valid_headers, as: :json
+        delete api_v1_notification_url(notification), headers: valid_headers, as: :json
       end.to change(Notification, :count).by(-1)
     end
   end

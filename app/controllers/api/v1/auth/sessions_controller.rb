@@ -6,8 +6,8 @@ module Api
     module Auth
       class SessionsController < ApplicationController
         def index
-          if current_api_user
-            render json: { is_login: true, data: current_api_user }
+          if current_api_v1_user
+            render json: { is_login: true, data: current_api_v1_user }
           else
             render json: { is_login: false, message: 'User not signed in.' }, status: :unauthorized
           end

@@ -5,7 +5,7 @@ module Api
     private
 
     def redirect_unauthorized!
-      render json: { error: :unauthorized }, status: :unauthorized unless current_api_user
+      render json: { error: :unauthorized }, status: :unauthorized unless current_api_v1_user
     end
   end
 end
