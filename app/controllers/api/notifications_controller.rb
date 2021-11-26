@@ -1,5 +1,5 @@
 module Api
-  class NotificationsController < ApplicationController
+  class NotificationsController < ApiController
     before_action :set_notification, only: %i[show update destroy]
 
     # GET /notifications
